@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -16,7 +16,7 @@
       height: 100vh;
     }
 
-    /* Slideshow */
+    /* Slideshow: Bright and Clear */
     #slideshow {
       position: fixed;
       top: 0;
@@ -35,12 +35,12 @@
       object-fit: cover;
       opacity: 0;
       transition: opacity 2s ease-in-out;
-      filter: brightness(60%); /* Slightly darker so text is readable */
+      filter: brightness(80%); /* Photos are nice and bright */
     }
 
     .slide.active { opacity: 1; }
 
-    /* Start Screen */
+    /* Opening Screen */
     #start-screen {
       position: fixed;
       top: 0;
@@ -67,61 +67,71 @@
       box-shadow: 0 5px 20px rgba(255, 77, 109, 0.5);
     }
 
-    /* THE QUIZ CONTAINER */
+    /* CONTENT BOX - Bottom Left (Sticker Style) */
     .overlay {
       position: absolute;
-      bottom: 50px;       /* Positioned near bottom for easy thumb reach */
-      left: 50%;
-      transform: translateX(-50%);
-      width: 90%;
-      max-width: 400px;   /* Keeps it looking like a nice card */
-      display: none;      /* Hidden until clicked */
+      bottom: 30px; 
+      left: 20px;   
+      width: auto;
+      display: none; /* Hidden until start */
       z-index: 50;
     }
 
-    .quiz-box {
-      background: rgba(0, 0, 0, 0.6); /* Dark Glass Effect */
-      backdrop-filter: blur(12px);
-      padding: 25px;
+    .glass-box {
+      background: rgba(0, 0, 0, 0.7); 
+      backdrop-filter: blur(10px);
+      padding: 20px 25px;
       border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      text-align: center;
-      animation: popUp 0.8s ease-out;
+      border-left: 4px solid #ff4d6d; /* Pink accent line */
+      width: 300px; /* Small width to not cover photos */
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      transition: height 0.3s ease;
     }
 
-    @keyframes popUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .quiz-box h2 {
-      font-family: 'Dancing Script', cursive; /* Romantic Font for Questions */
-      font-size: 1.6rem;
-      margin-top: 0;
-      margin-bottom: 20px;
-      color: #ff4d6d; /* Pink color for the question */
-      line-height: 1.4;
+    /* Quiz Styles */
+    .quiz-question {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.4rem;
+      color: #ff4d6d;
+      margin-bottom: 15px;
+      line-height: 1.3;
     }
 
     .option-btn {
       display: block;
       width: 100%;
-      margin: 10px 0;
-      padding: 12px;
-      border-radius: 50px;
-      border: 1px solid rgba(255, 77, 109, 0.3);
+      margin: 8px 0;
+      padding: 10px;
+      border-radius: 15px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
       background: rgba(255, 255, 255, 0.1);
       color: white;
-      font-size: 1rem;
-      font-family: 'Poppins', sans-serif;
+      font-size: 0.9rem;
       cursor: pointer;
-      transition: all 0.3s ease;
+      text-align: left;
+      padding-left: 15px;
     }
 
     .option-btn:active {
-      transform: scale(0.98);
       background: #ff4d6d;
+      border-color: #ff4d6d;
+    }
+
+    /* Greeting Text Style */
+    .greeting-text {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.5rem;
+      line-height: 1.4;
+      color: #fff;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+    }
+
+    .fadeIn { animation: fadeInAnim 1.5s forwards; }
+    @keyframes fadeInAnim {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
     }
 
     .heart {
@@ -137,21 +147,15 @@
       0% { transform: translateY(0) rotate(0deg); opacity: 1; }
       100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
     }
-    
-    /* End Message Style */
-    .final-msg {
-        font-size: 1.1rem;
-        line-height: 1.6;
-    }
   </style>
 </head>
 
 <body>
 
   <div id="start-screen" onclick="startExperience()">
-    <div style="font-size: 60px; margin-bottom: 10px;">💌</div>
+    <div style="font-size: 50px; margin-bottom: 15px;">💌</div>
     <h2 style="font-family: 'Dancing Script'; font-size: 2rem;">For Anshika ❤️</h2>
-    <button id="start-btn">Tap to Play 💕</button>
+    <button id="start-btn">Open Surprise 💕</button>
   </div>
 
   <div id="slideshow">
@@ -172,19 +176,18 @@
   </audio>
 
   <div class="overlay" id="main-content">
-    <div class="quiz-box">
-      <h2 id="question"></h2>
-      <div id="options"></div>
-    </div>
+    <div class="glass-box" id="box-content">
+      </div>
   </div>
 
   <script>
     const music = document.getElementById("bgMusic");
     const startScreen = document.getElementById("start-screen");
     const mainContent = document.getElementById("main-content");
+    const boxContent = document.getElementById("box-content");
     const slides = document.querySelectorAll(".slide");
 
-    // Your lovely questions
+    // --- QUIZ DATA ---
     const quiz = [
       {
         q: "Anshika, jab tum humare baare mein sochti ho, sabse pehle kya yaad aata hai? 💕",
@@ -204,19 +207,46 @@
       }
     ];
 
-    let current = 0;
-    let slideIndex = 0;
-    const qEl = document.getElementById("question");
-    const optEl = document.getElementById("options");
+    // --- GREETING MESSAGES ---
+    const messages = [
+      "Happy New Year, Anshika ❤️🎆",
+      "Ye saal mere liye aasaan nahi tha… 🌧️",
+      "Shayad tumhare liye bhi nahi 😔",
+      "Par ek baat jo kabhi kam nahi hui…",
+      "Wo tha mera pyaar tumhare liye 💖",
+      "Kabhi kabhi main apni baat sahi tarah se keh nahi paata…",
+      "Aur isi chakkar mein tumhe hurt kar deta hoon 💔",
+      "Uske liye mujhe dil se afsos hai 🤍",
+      "Par meri feelings kabhi fake nahi thi…",
+      "Na kal, na aaj, na kabhi ✨",
+      "Anshika, tum meri life ka wo hissa ho…",
+      "Jahan main sukoon mehsoos karta hoon 🫶",
+      "Tumhari ek smile… 😊",
+      "Mere hazaar problems ko shaant kar deti hai",
+      "Is naye saal mein 🎊",
+      "Main effort dikhana chahta hoon 🌱",
+      "Tumhara saath nibhana chahta hoon 🤞",
+      "Tumhari aankhon mein khushi dekhna chahta hoon 🥺❤️",
+      "Chahe raahein perfect na ho…",
+      "Par mera irada hamesha saccha rahega 💞",
+      "Anshika, main tumhe khona nahi chahta…",
+      "Main tumhe hamesha chahna chahta hoon 💫",
+      "Iss saal bhi… aur aane wale har saal mein ✨",
+      "Sirf tum, Anshika ❤️"
+    ];
 
-    // Slideshow Logic
+    let currentQuiz = 0;
+    let msgIndex = 0;
+    let slideIndex = 0;
+
+    // --- LOGIC START ---
+
     function nextSlide() {
       slides[slideIndex].classList.remove("active");
       slideIndex = (slideIndex + 1) % slides.length;
       slides[slideIndex].classList.add("active");
     }
 
-    // Flying Hearts Logic
     function createHeart() {
       const heart = document.createElement("div");
       heart.className = "heart";
@@ -226,73 +256,81 @@
       setTimeout(() => heart.remove(), 6000);
     }
 
-    // Start Everything
     function startExperience() {
       startScreen.style.display = "none";
       mainContent.style.display = "block";
       
-      // Play Music
       music.load();
       music.play().catch(() => {
           document.addEventListener('click', () => music.play(), {once: true});
       });
       
-      setInterval(nextSlide, 4000); // Change photo every 4s
-      setInterval(createHeart, 600);
-      loadQuestion(); // Start the Quiz
-    }
-
-    // Quiz Logic
-    function loadQuestion() {
-      // Fade effect for new question
-      qEl.style.opacity = 0;
-      optEl.style.opacity = 0;
+      setInterval(nextSlide, 5000);
+      setInterval(createHeart, 500);
       
-      setTimeout(() => {
-        qEl.innerHTML = quiz[current].q;
-        optEl.innerHTML = "";
-        
-        quiz[current].o.forEach(option => {
-          const btn = document.createElement("button");
-          btn.className = "option-btn";
-          btn.innerHTML = option;
-          btn.onclick = () => {
-             // Add a small click animation or sound here if you want
-             nextQuestion();
-          };
-          optEl.appendChild(btn);
-        });
-        
-        qEl.style.opacity = 1;
-        optEl.style.opacity = 1;
-      }, 300);
+      // Start with Quiz
+      loadQuizQuestion();
     }
 
-    function nextQuestion() {
-      current++;
-      if (current < quiz.length) {
-        loadQuestion();
+    // --- QUIZ FUNCTIONS ---
+    function loadQuizQuestion() {
+      const qData = quiz[currentQuiz];
+      
+      let html = `<div class="quiz-question fadeIn">${qData.q}</div>`;
+      qData.o.forEach(opt => {
+        html += `<button class="option-btn fadeIn" onclick="nextQuiz()">${opt}</button>`;
+      });
+      
+      boxContent.innerHTML = html;
+    }
+
+    function nextQuiz() {
+      currentQuiz++;
+      if (currentQuiz < quiz.length) {
+        // Add slight delay for smoothness
+        boxContent.style.opacity = 0;
+        setTimeout(() => {
+          loadQuizQuestion();
+          boxContent.style.opacity = 1;
+        }, 300);
       } else {
-        showEnd();
+        // Quiz Finished -> Start Greetings
+        boxContent.style.opacity = 0;
+        setTimeout(() => {
+          startGreetings();
+          boxContent.style.opacity = 1;
+        }, 500);
       }
     }
 
-    function showEnd() {
-      qEl.innerHTML = "Thank you, Anshika 🤍";
-      optEl.innerHTML = `
-        <div class="final-msg">
-          <p>Mujhe sahi jawab nahi chahiye the…<br>
-          Bas tumhara dil samajhna tha 💖</p>
-          <br>
-          <p>Happy New Year, Anshika 🎆<br>
-          Main hamesha tumhare saath hoon ✨</p>
-          <br>
-          <p style="font-size:0.9rem; opacity:0.8;">(Photos will keep playing... enjoy the song 🎶)</p>
-        </div>
-      `;
+    // --- GREETING FUNCTIONS ---
+    function startGreetings() {
+      updateGreeting();
+      setInterval(updateGreeting, 4500);
+    }
+
+    function updateGreeting() {
+      // Fade out
+      const textDiv = document.getElementById("greetingMsg");
+      
+      // If first time running, set up the structure
+      if (!textDiv) {
+        boxContent.innerHTML = `<div id="greetingMsg" class="greeting-text"></div>`;
+        document.getElementById("greetingMsg").innerHTML = messages[0];
+        msgIndex = 1;
+        return;
+      }
+
+      textDiv.style.opacity = 0;
+      setTimeout(() => {
+        textDiv.innerHTML = messages[msgIndex];
+        textDiv.classList.remove("fadeIn");
+        void textDiv.offsetWidth; // Trigger reflow
+        textDiv.classList.add("fadeIn");
+        textDiv.style.opacity = 1;
+        msgIndex = (msgIndex + 1) % messages.length;
+      }, 500);
     }
   </script>
 </body>
 </html>
-
-    
