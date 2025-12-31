@@ -16,7 +16,7 @@
       height: 100vh;
     }
 
-    /* Slideshow: Bright and Clear */
+    /* --- SLIDESHOW SECTION --- */
     #slideshow {
       position: fixed;
       top: 0;
@@ -35,12 +35,13 @@
       object-fit: cover;
       opacity: 0;
       transition: opacity 2s ease-in-out;
-      filter: brightness(80%); /* Photos are nice and bright */
+      /* Photos are kept bright so they look good */
+      filter: brightness(85%); 
     }
 
     .slide.active { opacity: 1; }
 
-    /* Opening Screen */
+    /* --- START SCREEN --- */
     #start-screen {
       position: fixed;
       top: 0;
@@ -56,42 +57,55 @@
       cursor: pointer;
     }
 
+    .envelope-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
     #start-btn {
-      padding: 15px 40px;
-      font-size: 1.1rem;
+      padding: 15px 45px;
+      font-size: 1.2rem;
       background: #ff4d6d;
       color: white;
       border: none;
       border-radius: 50px;
       cursor: pointer;
-      box-shadow: 0 5px 20px rgba(255, 77, 109, 0.5);
+      box-shadow: 0 5px 25px rgba(255, 77, 109, 0.6);
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
     }
 
-    /* CONTENT BOX - Bottom Left (Sticker Style) */
+    /* --- MAIN CONTENT BOX (Bottom Left) --- */
     .overlay {
       position: absolute;
-      bottom: 30px; 
+      bottom: 40px; 
       left: 20px;   
       width: auto;
-      display: none; /* Hidden until start */
+      display: none; /* Hidden until clicked */
       z-index: 50;
     }
 
     .glass-box {
-      background: rgba(0, 0, 0, 0.7); 
-      backdrop-filter: blur(10px);
-      padding: 20px 25px;
+      background: rgba(0, 0, 0, 0.65); 
+      backdrop-filter: blur(12px);
+      padding: 25px;
       border-radius: 20px;
-      border-left: 4px solid #ff4d6d; /* Pink accent line */
-      width: 300px; /* Small width to not cover photos */
-      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-      transition: height 0.3s ease;
+      border-left: 5px solid #ff4d6d; /* Romantic pink line */
+      width: 300px; /* Kept small to not block photos */
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      transition: all 0.5s ease;
     }
 
-    /* Quiz Styles */
+    /* Quiz Styling */
     .quiz-question {
       font-family: 'Dancing Script', cursive;
-      font-size: 1.4rem;
+      font-size: 1.5rem;
       color: #ff4d6d;
       margin-bottom: 15px;
       line-height: 1.3;
@@ -100,16 +114,17 @@
     .option-btn {
       display: block;
       width: 100%;
-      margin: 8px 0;
-      padding: 10px;
-      border-radius: 15px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      margin: 10px 0;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
       background: rgba(255, 255, 255, 0.1);
       color: white;
-      font-size: 0.9rem;
+      font-size: 0.95rem;
       cursor: pointer;
       text-align: left;
       padding-left: 15px;
+      transition: background 0.3s;
     }
 
     .option-btn:active {
@@ -117,18 +132,19 @@
       border-color: #ff4d6d;
     }
 
-    /* Greeting Text Style */
+    /* Greetings Styling */
     .greeting-text {
       font-family: 'Dancing Script', cursive;
-      font-size: 1.5rem;
+      font-size: 1.6rem;
       line-height: 1.4;
       color: #fff;
-      min-height: 60px;
+      min-height: 80px;
       display: flex;
       align-items: center;
     }
 
-    .fadeIn { animation: fadeInAnim 1.5s forwards; }
+    /* Animations */
+    .fadeIn { animation: fadeInAnim 1s forwards; }
     @keyframes fadeInAnim {
       from { opacity: 0; transform: translateX(-10px); }
       to { opacity: 1; transform: translateX(0); }
@@ -153,9 +169,9 @@
 <body>
 
   <div id="start-screen" onclick="startExperience()">
-    <div style="font-size: 50px; margin-bottom: 15px;">💌</div>
-    <h2 style="font-family: 'Dancing Script'; font-size: 2rem;">For Anshika ❤️</h2>
-    <button id="start-btn">Open Surprise 💕</button>
+    <div class="envelope-icon">💌</div>
+    <h2 style="font-family: 'Dancing Script'; font-size: 2.2rem; margin-top:0;">For Anshika ❤️</h2>
+    <button id="start-btn">Click for Magic ✨</button>
   </div>
 
   <div id="slideshow">
@@ -187,7 +203,7 @@
     const boxContent = document.getElementById("box-content");
     const slides = document.querySelectorAll(".slide");
 
-    // --- QUIZ DATA ---
+    // --- 1. THE QUIZ DATA ---
     const quiz = [
       {
         q: "Anshika, jab tum humare baare mein sochti ho, sabse pehle kya yaad aata hai? 💕",
@@ -207,7 +223,7 @@
       }
     ];
 
-    // --- GREETING MESSAGES ---
+    // --- 2. THE GREETING MESSAGES ---
     const messages = [
       "Happy New Year, Anshika ❤️🎆",
       "Ye saal mere liye aasaan nahi tha… 🌧️",
@@ -224,6 +240,7 @@
       "Tumhari ek smile… 😊",
       "Mere hazaar problems ko shaant kar deti hai",
       "Is naye saal mein 🎊",
+      "Main sirf baatein nahi…",
       "Main effort dikhana chahta hoon 🌱",
       "Tumhara saath nibhana chahta hoon 🤞",
       "Tumhari aankhon mein khushi dekhna chahta hoon 🥺❤️",
@@ -239,7 +256,7 @@
     let msgIndex = 0;
     let slideIndex = 0;
 
-    // --- LOGIC START ---
+    // --- 3. CORE FUNCTIONS ---
 
     function nextSlide() {
       slides[slideIndex].classList.remove("active");
@@ -260,22 +277,25 @@
       startScreen.style.display = "none";
       mainContent.style.display = "block";
       
+      // Attempt to play music
       music.load();
       music.play().catch(() => {
+          // Retry on interaction if auto-play fails
           document.addEventListener('click', () => music.play(), {once: true});
       });
       
       setInterval(nextSlide, 5000);
       setInterval(createHeart, 500);
       
-      // Start with Quiz
+      // BEGIN WITH QUIZ
       loadQuizQuestion();
     }
 
-    // --- QUIZ FUNCTIONS ---
+    // --- 4. QUIZ LOGIC ---
     function loadQuizQuestion() {
       const qData = quiz[currentQuiz];
       
+      // Create HTML for Question + Options
       let html = `<div class="quiz-question fadeIn">${qData.q}</div>`;
       qData.o.forEach(opt => {
         html += `<button class="option-btn fadeIn" onclick="nextQuiz()">${opt}</button>`;
@@ -286,15 +306,17 @@
 
     function nextQuiz() {
       currentQuiz++;
+      
+      // If there are more questions, show next one
       if (currentQuiz < quiz.length) {
-        // Add slight delay for smoothness
         boxContent.style.opacity = 0;
         setTimeout(() => {
           loadQuizQuestion();
           boxContent.style.opacity = 1;
         }, 300);
-      } else {
-        // Quiz Finished -> Start Greetings
+      } 
+      // If quiz ended, Switch to Greetings
+      else {
         boxContent.style.opacity = 0;
         setTimeout(() => {
           startGreetings();
@@ -303,17 +325,18 @@
       }
     }
 
-    // --- GREETING FUNCTIONS ---
+    // --- 5. GREETING LOGIC ---
     function startGreetings() {
-      updateGreeting();
+      // First, show the first message immediately
+      updateGreeting(); 
+      // Then rotate them every 4.5 seconds
       setInterval(updateGreeting, 4500);
     }
 
     function updateGreeting() {
-      // Fade out
       const textDiv = document.getElementById("greetingMsg");
       
-      // If first time running, set up the structure
+      // Setup the container if it's the first time running
       if (!textDiv) {
         boxContent.innerHTML = `<div id="greetingMsg" class="greeting-text"></div>`;
         document.getElementById("greetingMsg").innerHTML = messages[0];
@@ -321,13 +344,17 @@
         return;
       }
 
+      // Fade out old message
       textDiv.style.opacity = 0;
+      
       setTimeout(() => {
+        // Change text and Fade In
         textDiv.innerHTML = messages[msgIndex];
         textDiv.classList.remove("fadeIn");
-        void textDiv.offsetWidth; // Trigger reflow
+        void textDiv.offsetWidth; // reset animation
         textDiv.classList.add("fadeIn");
         textDiv.style.opacity = 1;
+        
         msgIndex = (msgIndex + 1) % messages.length;
       }, 500);
     }
