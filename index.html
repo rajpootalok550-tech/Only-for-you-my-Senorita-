@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -16,7 +16,7 @@
       height: 100vh;
     }
 
-    /* Slideshow: 10 Photos */
+    /* Slideshow */
     #slideshow {
       position: fixed;
       top: 0;
@@ -35,12 +35,12 @@
       object-fit: cover;
       opacity: 0;
       transition: opacity 2s ease-in-out;
-      filter: brightness(75%); /* Photos are bright and clear */
+      filter: brightness(60%); /* Slightly darker so text is readable */
     }
 
     .slide.active { opacity: 1; }
 
-    /* Opening Screen */
+    /* Start Screen */
     #start-screen {
       position: fixed;
       top: 0;
@@ -56,17 +56,6 @@
       cursor: pointer;
     }
 
-    .envelope {
-      font-size: 60px;
-      margin-bottom: 15px;
-      animation: bounce 2s infinite;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-15px); }
-    }
-
     #start-btn {
       padding: 15px 40px;
       font-size: 1.1rem;
@@ -78,38 +67,61 @@
       box-shadow: 0 5px 20px rgba(255, 77, 109, 0.5);
     }
 
-    /* Greeting Card (Bottom-Left) */
+    /* THE QUIZ CONTAINER */
     .overlay {
       position: absolute;
-      bottom: 30px; 
-      left: 20px;   
-      width: auto;
-      display: none;
+      bottom: 50px;       /* Positioned near bottom for easy thumb reach */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 400px;   /* Keeps it looking like a nice card */
+      display: none;      /* Hidden until clicked */
       z-index: 50;
     }
 
-    .greeting-sticker {
-      background: rgba(0, 0, 0, 0.65); 
-      backdrop-filter: blur(10px);
-      padding: 20px;
-      border-radius: 15px;
-      border-left: 5px solid #ff4d6d;
-      width: 280px; 
+    .quiz-box {
+      background: rgba(0, 0, 0, 0.6); /* Dark Glass Effect */
+      backdrop-filter: blur(12px);
+      padding: 25px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      text-align: center;
+      animation: popUp 0.8s ease-out;
     }
 
-    .text {
-      font-family: 'Dancing Script', cursive;
-      font-size: 1.5rem;
+    @keyframes popUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .quiz-box h2 {
+      font-family: 'Dancing Script', cursive; /* Romantic Font for Questions */
+      font-size: 1.6rem;
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: #ff4d6d; /* Pink color for the question */
       line-height: 1.4;
-      color: #fff;
-      text-align: left;
     }
 
-    .fadeIn { animation: fadeInAnim 1.5s forwards; }
-    @keyframes fadeInAnim {
-      from { opacity: 0; transform: translateX(-20px); }
-      to { opacity: 1; transform: translateX(0); }
+    .option-btn {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 12px;
+      border-radius: 50px;
+      border: 1px solid rgba(255, 77, 109, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      font-size: 1rem;
+      font-family: 'Poppins', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .option-btn:active {
+      transform: scale(0.98);
+      background: #ff4d6d;
     }
 
     .heart {
@@ -125,15 +137,21 @@
       0% { transform: translateY(0) rotate(0deg); opacity: 1; }
       100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
     }
+    
+    /* End Message Style */
+    .final-msg {
+        font-size: 1.1rem;
+        line-height: 1.6;
+    }
   </style>
 </head>
 
 <body>
 
   <div id="start-screen" onclick="startExperience()">
-    <div class="envelope">💌</div>
+    <div style="font-size: 60px; margin-bottom: 10px;">💌</div>
     <h2 style="font-family: 'Dancing Script'; font-size: 2rem;">For Anshika ❤️</h2>
-    <button id="start-btn">Click to Open 💕</button>
+    <button id="start-btn">Tap to Play 💕</button>
   </div>
 
   <div id="slideshow">
@@ -154,55 +172,51 @@
   </audio>
 
   <div class="overlay" id="main-content">
-    <div class="greeting-sticker">
-      <div id="message" class="text"></div>
+    <div class="quiz-box">
+      <h2 id="question"></h2>
+      <div id="options"></div>
     </div>
   </div>
 
   <script>
     const music = document.getElementById("bgMusic");
-    const message = document.getElementById("message");
     const startScreen = document.getElementById("start-screen");
     const mainContent = document.getElementById("main-content");
     const slides = document.querySelectorAll(".slide");
 
-    const messages = [
-      "Happy New Year, Anshika ❤️🎆",
-      "Ye saal mere liye aasaan nahi tha… 🌧️",
-      "Shayad tumhare liye bhi nahi 😔",
-      "Par ek baat jo kabhi kam nahi hui…",
-      "Wo tha mera pyaar tumhare liye 💖",
-      "Kabhi kabhi main apni baat sahi tarah se keh nahi paata…",
-      "Aur isi chakkar mein tumhe hurt kar deta hoon 💔",
-      "Uske liye mujhe dil se afsos hai 🤍",
-      "Par meri feelings kabhi fake nahi thi…",
-      "Na kal, na aaj, na kabhi ✨",
-      "Anshika, tum meri life ka wo hissa ho…",
-      "Jahan main sukoon mehsoos karta hoon 🫶",
-      "Tumhari ek smile… 😊",
-      "Mere hazaar problems ko shaant kar deti hai",
-      "Is naye saal mein 🎊",
-      "Main sirf baatein nahi…",
-      "Main effort dikhana chahta hoon 🌱",
-      "Tumhara saath nibhana chahta hoon 🤞",
-      "Tumhari aankhon mein khushi dekhna chahta hoon 🥺❤️",
-      "Chahe raahein perfect na ho…",
-      "Par mera irada hamesha saccha rahega 💞",
-      "Anshika, main tumhe khona nahi chahta…",
-      "Main tumhe hamesha chahna chahta hoon 💫",
-      "Iss saal bhi… aur aane wale har saal mein ✨",
-      "Sirf tum, Anshika ❤️"
+    // Your lovely questions
+    const quiz = [
+      {
+        q: "Anshika, jab tum humare baare mein sochti ho, sabse pehle kya yaad aata hai? 💕",
+        o: ["Chhoti chhoti fights 😅", "Random hasi-masti 😂", "Late-night baatein 🌙", "Sab kuch, hamesha ❤️"]
+      },
+      {
+        q: "Anshika, tumhe bina kisi wajah ke kya smile karwa deta hai? 😊",
+        o: ["Food 🍫", "Music 🎧", "Purani yaadein 🫶", "Main jab thoda silly ho jaata hoon 🤍"]
+      },
+      {
+        q: "Agar hum dono shaant baith kar saath ho, Anshika, tum kya choose karogi? 🌸",
+        o: ["Endless baatein 🗣️", "Comfortable silence 🌿", "Haath pakad ke baithna 🤝", "Sab kuch saath mein 💖"]
+      },
+      {
+        q: "Anshika, is naye saal mein humare liye tum kya chahogi? 🎆",
+        o: ["Zyada smiles 😊", "Kam misunderstandings 🌸", "Aur strong bond 🤞", "Sab kuch saath-saath ❤️"]
+      }
     ];
 
-    let msgIndex = 0;
+    let current = 0;
     let slideIndex = 0;
+    const qEl = document.getElementById("question");
+    const optEl = document.getElementById("options");
 
+    // Slideshow Logic
     function nextSlide() {
       slides[slideIndex].classList.remove("active");
       slideIndex = (slideIndex + 1) % slides.length;
       slides[slideIndex].classList.add("active");
     }
 
+    // Flying Hearts Logic
     function createHeart() {
       const heart = document.createElement("div");
       heart.className = "heart";
@@ -212,36 +226,73 @@
       setTimeout(() => heart.remove(), 6000);
     }
 
+    // Start Everything
     function startExperience() {
       startScreen.style.display = "none";
       mainContent.style.display = "block";
       
-      // Attempt to play music
+      // Play Music
       music.load();
-      music.play().catch(function(error) {
-          console.log("Music failed, waiting for user interaction:", error);
-          // If it fails, retry on the next click anywhere
-          document.addEventListener('click', () => {
-             music.play();
-          }, {once:true});
+      music.play().catch(() => {
+          document.addEventListener('click', () => music.play(), {once: true});
       });
       
-      setInterval(nextSlide, 5000);
-      setInterval(createHeart, 500);
-      updateText();
-      setInterval(updateText, 4500);
+      setInterval(nextSlide, 4000); // Change photo every 4s
+      setInterval(createHeart, 600);
+      loadQuestion(); // Start the Quiz
     }
 
-    function updateText() {
-      message.style.opacity = 0;
+    // Quiz Logic
+    function loadQuestion() {
+      // Fade effect for new question
+      qEl.style.opacity = 0;
+      optEl.style.opacity = 0;
+      
       setTimeout(() => {
-        message.innerHTML = messages[msgIndex];
-        message.classList.remove("fadeIn");
-        void message.offsetWidth; 
-        message.classList.add("fadeIn");
-        msgIndex = (msgIndex + 1) % messages.length;
-      }, 600);
+        qEl.innerHTML = quiz[current].q;
+        optEl.innerHTML = "";
+        
+        quiz[current].o.forEach(option => {
+          const btn = document.createElement("button");
+          btn.className = "option-btn";
+          btn.innerHTML = option;
+          btn.onclick = () => {
+             // Add a small click animation or sound here if you want
+             nextQuestion();
+          };
+          optEl.appendChild(btn);
+        });
+        
+        qEl.style.opacity = 1;
+        optEl.style.opacity = 1;
+      }, 300);
+    }
+
+    function nextQuestion() {
+      current++;
+      if (current < quiz.length) {
+        loadQuestion();
+      } else {
+        showEnd();
+      }
+    }
+
+    function showEnd() {
+      qEl.innerHTML = "Thank you, Anshika 🤍";
+      optEl.innerHTML = `
+        <div class="final-msg">
+          <p>Mujhe sahi jawab nahi chahiye the…<br>
+          Bas tumhara dil samajhna tha 💖</p>
+          <br>
+          <p>Happy New Year, Anshika 🎆<br>
+          Main hamesha tumhare saath hoon ✨</p>
+          <br>
+          <p style="font-size:0.9rem; opacity:0.8;">(Photos will keep playing... enjoy the song 🎶)</p>
+        </div>
+      `;
     }
   </script>
 </body>
 </html>
+
+    
