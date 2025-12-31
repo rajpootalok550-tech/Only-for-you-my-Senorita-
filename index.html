@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>For Anshika ❤️</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    /* Slideshow: 10 Photos */
+    #slideshow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 2s ease-in-out;
+      filter: brightness(75%); /* Photos are bright and clear */
+    }
+
+    .slide.active { opacity: 1; }
+
+    /* Opening Screen */
+    #start-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, #5a0000, #000);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      cursor: pointer;
+    }
+
+    .envelope {
+      font-size: 60px;
+      margin-bottom: 15px;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    #start-btn {
+      padding: 15px 40px;
+      font-size: 1.1rem;
+      background: #ff4d6d;
+      color: white;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 5px 20px rgba(255, 77, 109, 0.5);
+    }
+
+    /* Greeting Card (Bottom-Left) */
+    .overlay {
+      position: absolute;
+      bottom: 30px; 
+      left: 20px;   
+      width: auto;
+      display: none;
+      z-index: 50;
+    }
+
+    .greeting-sticker {
+      background: rgba(0, 0, 0, 0.65); 
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      border-radius: 15px;
+      border-left: 5px solid #ff4d6d;
+      width: 280px; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .text {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.5rem;
+      line-height: 1.4;
+      color: #fff;
+      text-align: left;
+    }
+
+    .fadeIn { animation: fadeInAnim 1.5s forwards; }
+    @keyframes fadeInAnim {
+      from { opacity: 0; transform: translateX(-20px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    .heart {
+      position: fixed;
+      bottom: -20px;
+      font-size: 20px;
+      animation: floatUp 6s linear forwards;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="start-screen" onclick="startExperience()">
+    <div class="envelope">💌</div>
+    <h2 style="font-family: 'Dancing Script'; font-size: 2rem;">For Anshika ❤️</h2>
+    <button id="start-btn">Click to Open 💕</button>
+  </div>
+
+  <div id="slideshow">
+    <img src="1.jpg" class="slide active">
+    <img src="2.jpg" class="slide">
+    <img src="3.jpg" class="slide">
+    <img src="4.jpg" class="slide">
+    <img src="5.jpg" class="slide">
+    <img src="6.jpg" class="slide">
+    <img src="7.jpg" class="slide">
+    <img src="8.jpg" class="slide">
+    <img src="9.jpg" class="slide">
+    <img src="10.jpg" class="slide">
+  </div>
+
+  <audio id="bgMusic" loop preload="auto">
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="overlay" id="main-content">
+    <div class="greeting-sticker">
+      <div id="message" class="text"></div>
+    </div>
+  </div>
+
+  <script>
+    const music = document.getElementById("bgMusic");
+    const message = document.getElementById("message");
+    const startScreen = document.getElementById("start-screen");
+    const mainContent = document.getElementById("main-content");
+    const slides = document.querySelectorAll(".slide");
+
+    const messages = [
+      "Happy New Year, Anshika ❤️🎆",
+      "Ye saal mere liye aasaan nahi tha… 🌧️",
+      "Shayad tumhare liye bhi nahi 😔",
+      "Par ek baat jo kabhi kam nahi hui…",
+      "Wo tha mera pyaar tumhare liye 💖",
+      "Kabhi kabhi main apni baat sahi tarah se keh nahi paata…",
+      "Aur isi chakkar mein tumhe hurt kar deta hoon 💔",
+      "Uske liye mujhe dil se afsos hai 🤍",
+      "Par meri feelings kabhi fake nahi thi…",
+      "Na kal, na aaj, na kabhi ✨",
+      "Anshika, tum meri life ka wo hissa ho…",
+      "Jahan main sukoon mehsoos karta hoon 🫶",
+      "Tumhari ek smile… 😊",
+      "Mere hazaar problems ko shaant kar deti hai",
+      "Is naye saal mein 🎊",
+      "Main sirf baatein nahi…",
+      "Main effort dikhana chahta hoon 🌱",
+      "Tumhara saath nibhana chahta hoon 🤞",
+      "Tumhari aankhon mein khushi dekhna chahta hoon 🥺❤️",
+      "Chahe raahein perfect na ho…",
+      "Par mera irada hamesha saccha rahega 💞",
+      "Anshika, main tumhe khona nahi chahta…",
+      "Main tumhe hamesha chahna chahta hoon 💫",
+      "Iss saal bhi… aur aane wale har saal mein ✨",
+      "Sirf tum, Anshika ❤️"
+    ];
+
+    let msgIndex = 0;
+    let slideIndex = 0;
+
+    function nextSlide() {
+      slides[slideIndex].classList.remove("active");
+      slideIndex = (slideIndex + 1) % slides.length;
+      slides[slideIndex].classList.add("active");
+    }
+
+    function createHeart() {
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      heart.innerHTML = "❤️";
+      heart.style.left = Math.random() * 100 + "vw";
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 6000);
+    }
+
+    function startExperience() {
+      startScreen.style.display = "none";
+      mainContent.style.display = "block";
+      
+      // Attempt to play music
+      music.load();
+      music.play().catch(function(error) {
+          console.log("Music failed, waiting for user interaction:", error);
+          // If it fails, retry on the next click anywhere
+          document.addEventListener('click', () => {
+             music.play();
+          }, {once:true});
+      });
+      
+      setInterval(nextSlide, 5000);
+      setInterval(createHeart, 500);
+      updateText();
+      setInterval(updateText, 4500);
+    }
+
+    function updateText() {
+      message.style.opacity = 0;
+      setTimeout(() => {
+        message.innerHTML = messages[msgIndex];
+        message.classList.remove("fadeIn");
+        void message.offsetWidth; 
+        message.classList.add("fadeIn");
+        msgIndex = (msgIndex + 1) % messages.length;
+      }, 600);
+    }
+  </script>
+</body>
+</html>
